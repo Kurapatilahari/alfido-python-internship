@@ -1,59 +1,65 @@
-# Task 1: Python File Handling & Automation
+# Task 2: API Integration & JSON Handling
 
 ## Goal
-Understand Python file handling, automation logic, and exception handling.
+Learn how Python communicates with external APIs and handles JSON data.
 
 ## What This Script Does
-- Reads and writes `.txt` and `.csv` files
-- Automates file operations: **rename**, **move**, **delete**
-- Uses `try / except` blocks throughout for robust error handling
-- Logs every action with a timestamp to `workspace/activity_log.txt`
+- Fetches live data using the **`requests`** library from a free public API
+  ([JSONPlaceholder](https://jsonplaceholder.typicode.com))
+- Parses the JSON response into Python objects
+- Applies **filtering** (by city) and **search** (by name) logic
+- Handles API errors gracefully: connection errors, timeouts, bad status codes,
+  and invalid JSON — the script never crashes
+- Saves the final filtered results to `users_output.json`
+
+## Setup
+```bash
+pip install -r requirements.txt
+```
 
 ## How to Run
 ```bash
-python3 file_automation.py
+python3 api_integration.py
 ```
 
-A `workspace/` folder will be created automatically (git-ignored) containing:
-- `notes.txt` → renamed to `notes_final.txt` → moved into `workspace/archive/`
-- `interns.csv` → read, printed, then deleted
-- `activity_log.txt` → timestamped log of every operation
-
-## Sample Output
+## Sample Output (abridged)
 ```
-============================================================
-TASK 1: PYTHON FILE HANDLING & AUTOMATION
-============================================================
-[OK] Workspace ready at 'workspace/'
-[OK] Wrote text file: workspace/notes.txt
-[OK] Read text file: workspace/notes.txt
+======================================================================
+TASK 2: API INTEGRATION & JSON HANDLING
+======================================================================
+[OK] Fetched data from https://jsonplaceholder.typicode.com/users (status 200)
 
---- notes.txt content ---
-This is a demo text file.
-Created by file_automation.py
+Total users fetched: 10
 
-[OK] Wrote CSV file: workspace/interns.csv
+--- All Users ---
+ID | Name                 | Email                       | City
+----------------------------------------------------------------------
+ 1 | Leanne Graham        | Sincere@april.biz           | Gwenborough
+ 2 | Ervin Howell         | Shanna@melissa.tv           | Wisokyburgh
+ ...
 
---- interns.csv content ---
-    -> {'name': 'Alice', 'age': '23', 'role': 'Intern'}
-    -> {'name': 'Bob', 'age': '25', 'role': 'Intern'}
-    -> {'name': 'Charlie', 'age': '22', 'role': 'Intern'}
-[OK] Read CSV file: workspace/interns.csv (3 rows)
-[OK] Renamed 'notes.txt' -> 'notes_final.txt'
-[OK] Moved 'notes_final.txt' to archive/
-[ERROR] Cannot delete, file not found: workspace/does_not_exist.txt
-[OK] Deleted: workspace/interns.csv
+--- Filter: cities containing 'south' ---
+ 5 | Chelsey Dietrich     | Lucio_Hettinger@annie.ca    | South Elvis
 
-[DONE] All operations completed. See workspace/activity_log.txt for the full log.
+--- Search: names containing 'a' ---
+ 1 | Leanne Graham        | Sincere@april.biz           | Gwenborough
+ ...
+
+--- Demonstrating error handling (bad endpoint) ---
+[ERROR] HTTP error from https://jsonplaceholder.typicode.com/this-endpoint-does-not-exist: 404 Client Error
+[OK] Error was handled gracefully, script did not crash.
+
+[OK] Saved output to users_output.json
+
+[DONE] API integration task complete.
 ```
 
 ## Key Concepts Demonstrated
 | Concept | Where |
 |---|---|
-| Writing files | `write_text_file()`, `write_csv_file()` |
-| Reading files | `read_text_file()`, `read_csv_file()` |
-| Renaming | `rename_file()` using `os.rename()` |
-| Moving | `move_file_to_archive()` using `shutil.move()` |
-| Deleting | `delete_file()` using `os.remove()` |
-| Exception handling | `try/except` around every file operation (`FileNotFoundError`, `PermissionError`, `IOError`, etc.) |
-| Logging/automation | `log_action()` appends timestamped entries |
+| Fetching data | `fetch_data()` using `requests.get()` |
+| Parsing JSON | `response.json()` |
+| Filtering | `filter_users_by_city()` |
+| Search logic | `search_users_by_name()` |
+| Error handling | `try/except` for `ConnectionError`, `Timeout`, `HTTPError`, `RequestException`, `JSONDecodeError` |
+| Saving results | `save_json()` writes formatted JSON to disk |
