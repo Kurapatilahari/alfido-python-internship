@@ -1,16 +1,14 @@
-# Task 2: API Integration & JSON Handling
+# Task 3: Data Analysis with Pandas
 
 ## Goal
-Learn how Python communicates with external APIs and handles JSON data.
+Demonstrate data analysis skills using Pandas.
 
 ## What This Script Does
-- Fetches live data using the **`requests`** library from a free public API
-  ([JSONPlaceholder](https://jsonplaceholder.typicode.com))
-- Parses the JSON response into Python objects
-- Applies **filtering** (by city) and **search** (by name) logic
-- Handles API errors gracefully: connection errors, timeouts, bad status codes,
-  and invalid JSON — the script never crashes
-- Saves the final filtered results to `users_output.json`
+- Loads and inspects a CSV dataset (`data/sales_data.csv`)
+- Cleans missing/incorrect data (missing quantity, missing price, missing date)
+- Applies filtering, grouping, and aggregation
+- Explains the resulting insights in plain English
+- Saves the cleaned dataset to `data/sales_data_cleaned.csv`
 
 ## Setup
 ```bash
@@ -19,47 +17,53 @@ pip install -r requirements.txt
 
 ## How to Run
 ```bash
-python3 api_integration.py
+python3 data_analysis.py
 ```
+
+## Dataset
+`data/sales_data.csv` is a small, intentionally messy sales dataset (15 orders)
+with a few missing values built in, so the cleaning step has real work to do:
+- 2 rows missing `quantity`
+- 1 row missing `unit_price`
+- 1 row missing `order_date`
 
 ## Sample Output (abridged)
 ```
-======================================================================
-TASK 2: API INTEGRATION & JSON HANDLING
-======================================================================
-[OK] Fetched data from https://jsonplaceholder.typicode.com/users (status 200)
+STEP 1: LOAD & INSPECT
+Shape: 15 rows x 7 columns
+Missing values per column:
+quantity      2
+unit_price    1
+order_date    1
 
-Total users fetched: 10
+STEP 2: CLEAN DATA
+[OK] Filled 2 missing 'quantity' values with median = 4.0
+[OK] Filled 1 missing 'unit_price' values using per-product median
+[OK] Dropped 1 row(s) with missing 'order_date'
+Cleaned shape: 14 rows x 7 columns
 
---- All Users ---
-ID | Name                 | Email                       | City
-----------------------------------------------------------------------
- 1 | Leanne Graham        | Sincere@april.biz           | Gwenborough
- 2 | Ervin Howell         | Shanna@melissa.tv           | Wisokyburgh
- ...
+STEP 3: FILTER, GROUP & AGGREGATE
+Revenue by region:
+        total_revenue  avg_order_value  num_orders
+region
+West            338.5       112.83               3
+East            292.5        73.13               4
+South           279.0        69.75               4
+North           148.5        49.50               3
 
---- Filter: cities containing 'south' ---
- 5 | Chelsey Dietrich     | Lucio_Hettinger@annie.ca    | South Elvis
-
---- Search: names containing 'a' ---
- 1 | Leanne Graham        | Sincere@april.biz           | Gwenborough
- ...
-
---- Demonstrating error handling (bad endpoint) ---
-[ERROR] HTTP error from https://jsonplaceholder.typicode.com/this-endpoint-does-not-exist: 404 Client Error
-[OK] Error was handled gracefully, script did not crash.
-
-[OK] Saved output to users_output.json
-
-[DONE] API integration task complete.
+STEP 4: INSIGHTS (in simple words)
+1. West is the strongest region, bringing in the most total revenue...
+2. Widget A is the best-selling product by revenue...
+3. Bob Smith is the top-spending customer...
+4. Missing values were filled using medians; the row with no order date
+   was removed since it can't be trusted for time-based reporting.
 ```
 
 ## Key Concepts Demonstrated
 | Concept | Where |
 |---|---|
-| Fetching data | `fetch_data()` using `requests.get()` |
-| Parsing JSON | `response.json()` |
-| Filtering | `filter_users_by_city()` |
-| Search logic | `search_users_by_name()` |
-| Error handling | `try/except` for `ConnectionError`, `Timeout`, `HTTPError`, `RequestException`, `JSONDecodeError` |
-| Saving results | `save_json()` writes formatted JSON to disk |
+| Loading/inspecting | `load_and_inspect()` — `pd.read_csv`, `.head()`, `.isna().sum()` |
+| Cleaning | `clean_data()` — `.fillna()` with median, per-group fill, `.dropna()` |
+| Filtering | `analyze_data()` — orders above the average value |
+| Grouping/aggregation | `.groupby()` with `.agg()` for region, product, and customer summaries |
+| Insights | `print_insights()` — plain-English takeaways from the numbers |

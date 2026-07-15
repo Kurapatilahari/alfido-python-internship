@@ -1,0 +1,16 @@
+order_id,customer,region,product,quantity,unit_price,order_date
+1001,Alice Johnson,North,Widget A,5,12.5,2025-01-05
+1002,Bob Smith,South,Widget B,3,18.0,2025-01-06
+1003,Charlie Lee,North,Widget A,,12.5,2025-01-07
+1004,Diana Prince,East,Widget C,2,25.0,2025-01-08
+1005,Ethan Hunt,West,Widget B,7,18.0,2025-01-09
+1006,Fiona Gallagher,South,Widget A,4,12.5,2025-01-10
+1007,George Miller,North,Widget C,1,25.0,
+1008,Hannah Baker,East,Widget B,6,,2025-01-12
+1009,Ian Wright,West,Widget A,8,12.5,2025-01-13
+1010,Julia Roberts,South,Widget C,3,25.0,2025-01-14
+1011,Alice Johnson,North,Widget B,2,18.0,2025-01-15
+1012,Kevin Hart,East,Widget A,5,12.5,2025-01-16
+1013,Bob Smith,South,Widget C,4,25.0,2025-01-17
+1014,Laura Palmer,West,Widget A,9,12.5,2025-01-18
+1015,Diana Prince,East,Widget B,,18.0,2025-01-19
